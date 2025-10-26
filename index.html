@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Éditeur de Texte Professionnel | TextPro Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-edit"></i>
+          <h1>TextPro Editor</h1>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-icon" id="themeToggle" title="Changer le thème">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="btn btn-icon" id="fullscreenToggle" title="Plein écran">
+            <i class="fas fa-expand"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Editor Container -->
+    <div class="editor-container">
+      <!-- Page Tabs -->
+      <div class="page-tabs-container">
+        <div class="page-tabs" id="pageTabs">
+          <div class="page-tab active" data-page="page1">
+            <span>Document 1</span>
+            <button class="tab-close" data-page="page1">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="addPage">
+          <i class="fas fa-plus"></i>
+          Nouvelle Page
+        </button>
+      </div>
+      
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <!-- Formatting Group -->
+        <div class="toolbar-group">
+          <button class="btn btn-toolbar" id="bold" title="Gras (Ctrl+B)">
+            <i class="fas fa-bold"></i>
+          </button>
+          <button class="btn btn-toolbar" id="italic" title="Italique (Ctrl+I)">
+            <i class="fas fa-italic"></i>
+          </button>
+          <button class="btn btn-toolbar" id="underline" title="Souligné (Ctrl+U)">
+            <i class="fas fa-underline"></i>
+          </button>
+        </div>
+
+        <!-- Text Color Group -->
+        <div class="toolbar-group">
+          <div class="color-picker-container">
+            <input type="color" id="textColor" title="Couleur du texte" value="#1e293b">
+            <label for="textColor" class="color-label">
+              <i class="fas fa-palette"></i>
+            </label>
+          </div>
+        </div>
+
+        <!-- Font Group -->
+        <div class="toolbar-group">
+          <select id="fontFamily" class="form-select" title="Police">
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Helvetica">Helvetica</option>
+          </select>
+          <select id="fontSize" class="form-select" title="Taille de police">
+            <option value="1">Petit</option>
+            <option value="2">Normal</option>
+            <option value="3" selected>Moyen</option>
+            <option value="5">Grand</option>
+            <option value="7">Très grand</option>
+          </select>
+        </div>
+
+        <!-- Alignment Group -->
+        <div class="toolbar-group">
+          <button class="btn btn-toolbar" id="alignLeft" title="Aligner à gauche">
+            <i class="fas fa-align-left"></i>
+          </button>
+          <button class="btn btn-toolbar" id="alignCenter" title="Aligner au centre">
+            <i class="fas fa-align-center"></i>
+          </button>
+          <button class="btn btn-toolbar" id="alignRight" title="Aligner à droite">
+            <i class="fas fa-align-right"></i>
+          </button>
+          <button class="btn btn-toolbar" id="justify" title="Justifier">
+            <i class="fas fa-align-justify"></i>
+          </button>
+        </div>
+
+        <!-- Lists Group -->
+        <div class="toolbar-group">
+          <button class="btn btn-toolbar" id="insertUnorderedList" title="Liste à puces">
+            <i class="fas fa-list-ul"></i>
+          </button>
+          <button class="btn btn-toolbar" id="insertOrderedList" title="Liste numérotée">
+            <i class="fas fa-list-ol"></i>
+          </button>
+          <button class="btn btn-toolbar" id="outdent" title="Diminuer l'indentation">
+            <i class="fas fa-outdent"></i>
+          </button>
+          <button class="btn btn-toolbar" id="indent" title="Augmenter l'indentation">
+            <i class="fas fa-indent"></i>
+          </button>
+        </div>
+
+        <!-- Media Group -->
+        <div class="toolbar-group">
+          <button class="btn btn-toolbar" id="insertImage" title="Insérer une image">
+            <i class="fas fa-image"></i>
+          </button>
+          <button class="btn btn-toolbar" id="insertLink" title="Insérer un lien">
+            <i class="fas fa-link"></i>
+          </button>
+          <button class="btn btn-toolbar" id="insertTable" title="Insérer un tableau">
+            <i class="fas fa-table"></i>
+          </button>
+        </div>
+
+        <!-- Actions Group -->
+        <div class="toolbar-group">
+          <button class="btn btn-toolbar" id="undo" title="Annuler (Ctrl+Z)">
+            <i class="fas fa-undo"></i>
+          </button>
+          <button class="btn btn-toolbar" id="redo" title="Refaire (Ctrl+Y)">
+            <i class="fas fa-redo"></i>
+          </button>
+          <button class="btn btn-toolbar" id="search" title="Rechercher (Ctrl+F)">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+
+        <!-- Word Counter -->
+        <div class="toolbar-group word-counter-container">
+          <div class="word-counter" id="wordCounter">
+            <span class="word-count">0 mots</span>
+            <span class="char-count">0 caractères</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Editor Area -->
+      <div class="editor-area">
+        <div id="pages">
+          <div class="page active" id="page1">
+            <div id="editor1" class="editor" contenteditable="true">
+              <p>Commencez à taper votre texte ici...</p>
+              <p>Utilisez la barre d'outils pour formater votre contenu.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="status-left">
+          <span class="status-item">Prêt</span>
+        </div>
+        <div class="status-right">
+          <span class="status-item" id="currentTime"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Actions -->
+    <div class="file-actions">
+      <button class="btn btn-secondary" id="openBtn">
+        <i class="fas fa-folder-open"></i>
+        Ouvrir un fichier
+      </button>
+      <div class="export-actions">
+        <button class="btn btn-primary" id="saveTxtBtn">
+          <i class="fas fa-save"></i>
+          Exporter en TXT
+        </button>
+        <button class="btn btn-primary" id="savePdfBtn">
+          <i class="fas fa-file-pdf"></i>
+          Exporter en PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="searchModal">
+    <div class="modal-header">
+      <h3>Rechercher et Remplacer</h3>
+      <button class="btn btn-icon" id="closeSearchBtn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="searchInput">Rechercher :</label>
+        <input type="text" id="searchInput" placeholder="Entrez le texte à rechercher..." class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="replaceInput">Remplacer par :</label>
+        <input type="text" id="replaceInput" placeholder="Entrez le texte de remplacement..." class="form-input">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="findBtn">Rechercher</button>
+      <button class="btn btn-secondary" id="replaceBtn">Remplacer</button>
+      <button class="btn btn-primary" id="replaceAllBtn">Remplacer tout</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
